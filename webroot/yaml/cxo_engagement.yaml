@@ -1,0 +1,417 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: LinkCXO API
+  description: CXO Engagements API Specification
+schemes:
+  - http
+host: localhost
+basePath: /linkcxo-api/api
+tags:
+  - name: Common API Endpoints 
+    description: API endpoints to fetch CXO engagements 
+paths:
+  /events.json:
+    get:
+      tags:
+        - Events API Endpoints 
+      summary: Get list of events held
+      description: Fetches all events from database
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+    post:
+      tags:
+        - Events API Endpoints 
+      summary: Save Data.
+      description: Save event to database.
+      consumes:
+        - application/x-www-form-urlencoded
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: user_id
+          type: string
+          required: true
+        - in: formData
+          name: name
+          type: string
+          required: true
+        - in: formData
+          name: location
+          type: string
+          required: true
+        - in: formData
+          name: start_date
+          type: string
+          required: true
+        - in: formData
+          name: end_date
+          type: string
+          required: true
+        - in: formData
+          name: start_time
+          type: string
+          required: true
+        - in: formData
+          name: end_time
+          type: string
+          required: true
+        - in: formData
+          name: host_to
+          type: string
+          required: true
+        - in: formData
+          name: event_fee
+          type: string
+          required: true
+        - in: formData
+          name: event_type
+          type: string
+          required: true
+        - in: formData
+          name: description
+          type: string
+          required: false
+        - in: formData
+          name: event_serialize
+          type: file
+          required: false
+        - in: formData
+          name: connections[]
+          type: array
+          required: false
+          items:
+            type: string
+        - in: formData
+          name: contacts[]
+          type: array
+          required: false
+          items:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /trainings.json:
+    get:
+      tags:
+        - Trainings API Endpoints 
+      summary: Get list of trainings held
+      description: Fetches all trainings from database
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+    post:
+      tags:
+        - Trainings API Endpoints 
+      summary: Save Data.
+      description: Save training to database.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: user_id
+          type: string
+          required: true
+        - in: formData
+          name: type
+          type: string
+          required: true
+        - in: formData
+          name: comments
+          type: string
+          required: false
+        - in: formData
+          name: industries[]
+          type: array
+          required: false
+          items:
+            type: string
+        - in: formData
+          name: institutes[]
+          type: array
+          required: false
+          items:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+  /enterpreneur-club.json:
+    get:
+      tags:
+        - Enterpreneur Club API Endpoints 
+      summary: Get list of requests
+      description: Fetches all requests from database
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+    post:
+      tags:
+        - Enterpreneur Club API Endpoints 
+      summary: Save Data.
+      description: Save request to join enterpreneur club.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: user_id
+          type: string
+          required: true
+        - in: formData
+          name: status
+          type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+  /enterpreneur-club/{club_id}/.json:
+    get:
+      tags:
+        - Enterpreneur Club API Endpoints 
+      summary: Fetch single record
+      description: View record using ID
+      produces:
+        - application/json
+      parameters:
+        - name: club_id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+    put:
+      tags:
+        - Enterpreneur Club API Endpoints 
+      summary: Update Status of request
+      description: Accept/Reject request
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: club_id
+          type: string
+          required: true
+        - in: formData
+          name: status
+          type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+    delete:
+      tags:
+        - Enterpreneur Club API Endpoints 
+      summary: Delete Request
+      description: Delete request from DB
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: club_id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+  /premium-club.json:
+    get:
+      tags:
+        - Premium Club API Endpoints 
+      summary: Get list of requests
+      description: Fetches all requests from database
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+    post:
+      tags:
+        - Premium Club API Endpoints 
+      summary: Save Data.
+      description: Save request to join Premium club.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: user_id
+          type: string
+          required: true
+        - in: formData
+          name: status
+          type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+  /premium-club/{club_id}/.json:
+    get:
+      tags:
+        - Premium Club API Endpoints 
+      summary: Fetch single record
+      description: View record using ID
+      produces:
+        - application/json
+      parameters:
+        - name: club_id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+    put:
+      tags:
+        - Premium Club API Endpoints 
+      summary: Update Status of request
+      description: Accept/Reject request
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: club_id
+          type: string
+          required: true
+        - in: formData
+          name: status
+          type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+    delete:
+      tags:
+        - Premium Club API Endpoints 
+      summary: Delete Request
+      description: Delete request from DB
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: club_id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+  /ngos.json:
+    get:
+      tags:
+        - NGOS API Endpoints 
+      summary: Get list of ngo
+      description: Fetches all requests from database
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+    post:
+      tags:
+        - NGOS API Endpoints 
+      summary: Save Data.
+      description: Save request to join Premium club.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: user_id
+          type: string
+          required: true
+        - in: formData
+          name: comments
+          type: string
+          required: false
+        - in: formData
+          name: area_of_interests[]
+          type: array
+          required: true
+          items:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+  /ngos/{ngo_id}/.json:
+    get:
+      tags:
+        - NGOS API Endpoints 
+      summary: Fetch single record
+      description: View record using ID
+      produces:
+        - application/json
+      parameters:
+        - name: ngo_id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+    

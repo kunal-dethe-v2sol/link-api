@@ -1,0 +1,486 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: LinkCXO API
+  description: Users API Specification
+schemes:
+  - http
+host: localhost
+basePath: /linkcxo-api/api
+tags:
+  - name: User Signup, Login, Forgot password
+    description: API methods for logging in and signing up
+  - name: User Profile Details
+    description: API methods for fetching and saving user profile details.
+paths:
+  /users/{user_id}/education-info.json:
+    put:
+      tags:
+        - User Profile Details
+      summary: User education information
+      description: Updates education information of logged in user.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: string
+        - in: formData
+          name: dob
+          type: string
+          format: date
+        - in: formData
+          name: marital_status
+          enum:
+            - "single"
+            - "married"
+            - "un-married"
+            - "divorced"
+          type: string
+        - in: formData
+          name: gender
+          enum:
+            - "male"
+            - "female"
+          type: string
+        - in: formData
+          name: email
+          description: Alternate email address
+          type: string
+        - in: formData
+          name: alt_mobile
+          description: Alternate mobile number
+          type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+      security:
+        - api_key: []
+    get:
+      tags:
+        - User Profile Details
+      summary: User education information
+      description: Fetches education information of logged in user.
+      produces:
+        - application/json
+      parameters:
+        - name: user_id
+          in: path
+          description: User id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+      security:
+        - api_key: []
+  /users/{user_id}/experience-info.json:
+    put:
+      tags:
+        - User Profile Details
+      summary: User experience information
+      description: Updates experience information of logged in user.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: string
+        - in: formData
+          name: dob
+          type: string
+          format: date
+        - in: formData
+          name: marital_status
+          enum:
+            - "single"
+            - "married"
+            - "un-married"
+            - "divorced"
+          type: string
+        - in: formData
+          name: gender
+          enum:
+            - "male"
+            - "female"
+          type: string
+        - in: formData
+          name: email
+          description: Alternate email address
+          type: string
+        - in: formData
+          name: alt_mobile
+          description: Alternate mobile number
+          type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+      security:
+        - api_key: []
+    get:
+      tags:
+        - User Profile Details
+      summary: User experience information
+      description: Fetches experience information of logged in user.
+      produces:
+        - application/json
+      parameters:
+        - name: user_id
+          in: path
+          description: User id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+      security:
+        - api_key: []
+  /users/{user_id}/personal-info.json:
+    put:
+      tags:
+        - User Profile Details
+      summary: User personal information
+      description: Updates personal information of logged in user.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: string
+        - in: formData
+          name: dob
+          type: string
+          format: date
+        - in: formData
+          name: marital_status
+          enum:
+            - "single"
+            - "married"
+            - "un-married"
+            - "divorced"
+          type: string
+        - in: formData
+          name: gender
+          enum:
+            - "male"
+            - "female"
+          type: string
+        - in: formData
+          name: email
+          description: Alternate email address
+          type: string
+        - in: formData
+          name: alt_mobile
+          description: Alternate mobile number
+          type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+      security:
+        - api_key: []
+    get:
+      tags:
+        - User Profile Details
+      summary: User personal information
+      description: Fetches personal information of logged in user.
+      produces:
+        - application/json
+      parameters:
+        - name: user_id
+          in: path
+          description: User id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+      security:
+        - api_key: []
+  /users/{user_id}/primary-info.json:
+    put:
+      tags:
+        - User Profile Details
+      summary: User primary information
+      description: Updates primary information of logged in user.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: string
+        - in: formData
+          name: firstname
+          type: string
+          required: true
+        - in: formData
+          name: lastname
+          type: string
+          required: true
+        - in: formData
+          name: email
+          type: string
+          required: true
+        - in: formData
+          name: mobile_no
+          type: integer
+          required: true
+        - in: formData
+          name: country_id
+          type: string
+          required: true
+        - in: formData
+          name: state_id
+          type: string
+          required: true
+        - in: formData
+          name: city_id
+          type: string
+          required: true
+        - in: formData
+          name: total_exp
+          type: string
+          required: true
+        - in: formData
+          name: key_skills
+          type: string
+          required: true
+        - in: formData
+          name: summary
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+      security:
+        - api_key: []
+    get:
+      tags:
+        - User Profile Details
+      summary: User primary information
+      description: Fetches primary information of logged in user.
+      produces:
+        - application/json
+      parameters:
+        - name: user_id
+          in: path
+          description: User id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+      security:
+        - api_key: []
+  /login.json:
+    post:
+      tags: 
+        - User Signup, Login, Forgot password
+      summary: User login
+      description: Check authenticate user while entering username and password
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: email
+          type: string
+          required: true
+        - in: formData
+          name: password
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+  /users/{user_id}/set-password/{password_token}/.json:
+    put:
+      tags: 
+        - User Signup, Login, Forgot password
+      summary: Setting password for account
+      description: Allows user to set a new password for the account
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: user_id
+          type: string
+          required: true
+        - in: path
+          name: password_token
+          type: string
+          required: true
+        - in: formData
+          name: new_password
+          type: string
+          required: true
+        - in: formData
+          name: confirm_password
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+  /signup.json:
+    post:
+      tags: 
+        - User Signup, Login, Forgot password
+      summary: Request signup
+      description: Allows user to create a signup request.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: registration_type
+          type: string
+          enum:
+            - "direct-request"
+            - "admin-invite"
+            - "referral-invite"
+            - "shared-invite"
+          default: "direct-request"
+          required: true
+        - in: formData
+          name: social_type
+          type: string
+          enum:
+            - "linkcxo"
+            - "linkedin"
+            - "twitter"
+            - "facebook"
+            - "google"
+          default: "linkcxo"
+          required: true
+        - in: formData
+          name: social_serialize
+          type: string
+          required: true
+        - in: formData
+          name: firstname
+          type: string
+          required: true
+        - in: formData
+          name: lastname
+          type: string
+          required: true
+        - in: formData
+          name: email
+          type: string
+          required: true
+        - in: formData
+          name: mobile_no
+          type: string
+          required: true
+        - in: formData
+          name: otp
+          type: integer
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+  /verify/email/{verification_token}/.json:
+    put:
+      tags: 
+        - User Signup, Login, Forgot password
+      summary: Email verification
+      description: Verify email address using token match
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: verification_token
+          type: string
+          required: true
+        - in: formData
+          name: mobile_no
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+  /request/otp.json:  
+    put:
+      tags: 
+        - User Signup, Login, Forgot password
+      summary: OTP request
+      description: Generates OTP request for verification
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: mobile_no
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+  /request/password.json:
+    put:
+      tags: 
+        - User Signup, Login, Forgot password
+      summary: Forgot password request
+      description: Generates new password request
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: email
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: token
+    in: query

@@ -1,0 +1,253 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: LinkCXO API
+  description: Messages API Specification
+schemes:
+  - http
+host: localhost
+basePath: /linkcxo-api/api
+paths:
+  /threads:
+    get:
+      summary: |-
+        - Thread List
+        - Search Messages
+      description: |-
+        - List of all the threads
+        - Searching the Messages
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: search
+          type: string
+          required: false
+          description: |-
+            - To be used for the below conditions.
+            - Search Messages
+            - Searching the Messages
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/limit'
+      responses:
+        '200':
+          description: OK
+      security:
+        - api_key: []
+    delete:
+      summary: |-
+        - Delete threads matching selected Messages
+        - Delete all Messages
+        - Block users
+        - Unblock Users
+      description: |-
+        - Deletes all threads matching selected messages.
+        - Deleting threads and all the messages along with it.
+        - Block Users in the thread.
+        - Unblock Users in the thread.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: thread_id
+          type: array
+          items:
+            type: string
+          required: true
+        - in: formData
+          name: status
+          type: string
+          required: true
+          enum:
+            - active
+            - inactive
+            - blocked
+      responses:
+        '200':
+          description: OK
+      security:
+        - api_key: []
+  '/threads/{thread_id}':
+    get:
+      summary: '- Get thread'
+      description: Get single thread details
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/thread_id'
+      responses:
+        '200':
+          description: OK
+      security:
+        - api_key: []
+  /threads/messages:
+    post:
+      summary: Send Message
+      description: Sending the messages to the threads
+      consumes:
+        - application/x-www-form-urlencoded
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: header
+          type: string
+          required: true
+        - in: formData
+          name: message_type
+          type: string
+          required: true
+        - in: formData
+          name: message
+          type: string
+          required: true
+          enum:
+            - text
+            - image
+            - non-image
+        - in: formData
+          name: thread_id
+          type: string
+          required: false
+        - in: formData
+          name: 'user_ids[]'
+          type: array
+          items:
+            type: string
+          collectionFormat: multi
+          required: false
+      responses:
+        '200':
+          description: OK
+      security:
+        - api_key: []
+  '/threads/{thread_id}/messages':
+    get:
+      summary: |-
+        - Get Messages.
+        - Read Receipt.
+      description: |-
+        - Getting all the messages in the threads.
+        - Read messages and unread messages.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/thread_id'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/limit'
+      responses:
+        '200':
+          description: OK
+      security:
+        - api_key: []
+  '/threads/{thread_id}/messages/export':
+    get:
+      summary: '- Export Messages'
+      description: '- Exports all the messages (text only) from the thread'
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/thread_id'
+        - in: query
+          name: action
+          type: string
+          enum:
+            - export
+          required: false
+          description: |-
+            - To be used for the below condition.
+            - Exports all the messages (text only) from the thread
+      responses:
+        '200':
+          description: OK
+      security:
+        - api_key: []
+  '/threads/{thread_id}/users':
+    post:
+      summary: Add Participant(s)
+      description: Adding Participant(s) in a thread
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/thread_id'
+        - in: formData
+          name: user_id
+          type: array
+          items:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+      security:
+        - api_key: []
+  /users/token:
+    post:
+      summary: Authorization
+      description: Authorization
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: email
+          type: string
+          required: true
+        - in: formData
+          name: password
+          type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+parameters:
+  thread_id:
+    in: path
+    name: thread_id
+    type: string
+    required: true
+  user_id:
+    in: path
+    name: user_id
+    type: string
+    required: true
+  message_id:
+    in: path
+    name: message_id
+    type: string
+    required: true
+  search:
+    in: path
+    name: search
+    type: string
+    required: true
+  page:
+    in: query
+    name: page
+    type: integer
+    default: 1
+    required: false
+  limit:
+    in: query
+    name: limit
+    type: integer
+    required: false
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: token
+    in: query

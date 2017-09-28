@@ -1,0 +1,468 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: LinkCXO API
+  description: Groups API Specification
+schemes:
+  - http
+host: localhost
+basePath: /linkcxo-api/api
+paths:
+  /groups:
+    get:
+      summary: Groups You Manage
+      description: List of active groups which the logged-in User has created.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: type
+          type: string
+          enum:
+            - manage
+            - joined
+            - my
+            - trending
+          description: >-
+            - manage - List of active groups which the logged-in User has created.
+            (status - admin).
+
+            - joined - List of active groups which the logged-in User has
+            joined. (status - moderator or member)
+              
+            - my - List of groups which the logged-in User has created and
+            joined. (status - admin or moderator or member)
+
+            - trending - Initially these groups will be all active groups order
+            by creation time descending.
+          required: true
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/limit'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Group'
+      security:
+        - api_key: []
+    post:
+      summary: Create new Group
+      description: Creates new group.
+      consumes:
+        #- application/x-www-form-urlencoded
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: image
+          type: file
+          required: false
+        - in: formData
+          name: name
+          type: string
+          required: true
+        - in: formData
+          name: about
+          type: string
+          required: true
+        - in: formData
+          name: visibility
+          type: string
+          required: true
+          enum:
+            - public
+            - private
+        - in: formData
+          name: guidelines
+          type: string
+          required: false
+        - in: formData
+          name: member_ids[]
+          type: array
+          items:
+            type: string
+          collectionFormat: multi
+          required: false
+      responses:
+        '200':
+          description: OK
+      security:
+        - api_key: []
+  '/groups/{group_id}':
+    get:
+      summary: Single Group Details
+      description: Fetch single group details.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/group_id'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Group'
+      security:
+        - api_key: []
+    put:
+      summary: Edit Group Settings
+      description: 'Update the Group details like image, name, about, etc.'
+      consumes:
+        - application/x-www-form-urlencoded
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/group_id'
+        - in: formData
+          name: image
+          type: file
+          required: false
+        - in: formData
+          name: name
+          type: string
+          required: true
+        - in: formData
+          name: about
+          type: string
+          required: true
+        - in: formData
+          name: visibility
+          type: string
+          enum:
+            - public
+            - private
+          required: true
+        - in: formData
+          name: post_approval_required
+          type: string
+          enum:
+            - 'no'
+            - 'yes'
+          required: true
+        - in: formData
+          name: guidelines
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+      security:
+        - api_key: []
+    delete:
+      summary: Delete Group
+      description: Deletes the Group. Only admin users can delete the group.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/group_id'
+      responses:
+        '200':
+          description: OK
+      security:
+        - api_key: []
+  '/groups/{group_id}/posts':
+    get:
+      summary: >-
+        - Group Post List
+        - Reported Group Post List
+        - Search Group Posts
+      description: >-
+        - Fetch all active Posts added in that Group by all active members.
+        
+        - Fetch all active Posts reported by active Members in that Group.
+        
+        - Fetch the Group Posts filtered by the search term.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/group_id'
+        - in: query
+          name: status
+          type: string
+          enum:
+            - reported
+          required: false
+          description: >-
+            - To be used for the below conditions.
+            
+            - Reported Group Post List
+            
+            - Fetch all active Posts reported by active Members in that Group.
+        - in: query
+          name: search
+          type: string
+          required: false
+          description: >-
+            - To be used for the below conditions.
+            
+            - Search Group Posts
+            
+            - Fetch the Group Posts filtered by the search term.
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/limit'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Post'
+      security:
+        - api_key: []
+  '/groups/{group_id}/posts/{post_id}':
+    put:
+      summary: Keep Reported Post
+      description: Updates the Post's status to active.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/group_id'
+        - $ref: '#/parameters/post_id'
+        - in: formData
+          name: status
+          type: string
+          enum:
+            - active
+          required: true
+      responses:
+        '200':
+          description: OK
+      security:
+        - api_key: []
+  '/groups/{group_id}/members':
+    get:
+      summary: >-
+        - Member List
+        
+        - Member Request List
+        
+        - Search Members
+      description: >-
+        - Fetch the Group Member list.
+        
+        - Fetch the list of Users who have requested to join the selected group
+        but the approval is still pending (status = requested).
+        
+        - Fetch the Group Member list filtered by the search term.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/group_id'
+        - in: query
+          name: status
+          type: string
+          enum:
+            - all
+            - admin
+            - moderator
+            - member
+            - requested
+          required: false
+          description: >-
+            - To be used for the below conditions.
+            
+            - Member Request List
+            
+            - Fetch the list of Users who have requested to join the selected group but the approval is still pending (status = requested).
+        - in: query
+          name: search
+          type: string
+          required: false
+          description: >-
+            - To be used for the below conditions.
+            
+            - Search Members
+            
+            - Fetch the Group Member list filtered by the search term.
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/limit'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/GroupMember'
+      security:
+        - api_key: []
+    post:
+      summary: Add User(s) as Group Member
+      description: Select User(s) to add them to the Group.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/group_id'
+        - in: formData
+          name: request_type
+          type: string
+          enum:
+            - admin
+            - self
+          required: true
+        - in: formData
+          name: user_ids
+          type: array
+          items:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+      security:
+        - api_key: []
+  '/groups/{group_id}/members/{group_member_id}':
+    delete:
+      summary: Leave Group
+      description: >-
+        Update the Group Member record for the logged-in User with status
+        'left'.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/group_id'
+        - $ref: '#/parameters/group_member_id'
+        - in: formData
+          name: status
+          type: string
+          enum:
+            - left
+            - removed
+          required: true
+        - in: formData
+          name: reason
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+      security:
+        - api_key: []
+  '/groups/{group_id}/members/{group_member_id}/status':
+    put:
+      summary: Accept Member Request
+      description: Update the selected Group Member's record with status 'member'.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/group_id'
+        - $ref: '#/parameters/group_member_id'
+        - in: formData
+          name: status
+          type: string
+          enum:
+            - member
+          required: true
+      responses:
+        '200':
+          description: OK
+      security:
+        - api_key: []
+    delete:
+      summary: Reject Member Request
+      description: Update the selected Group Member's record with status 'rejected'.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/group_id'
+        - $ref: '#/parameters/group_member_id'
+        - in: formData
+          name: status
+          type: string
+          enum:
+            - rejected
+          required: true
+      responses:
+        '200':
+          description: OK
+      security:
+        - api_key: []
+  /users/token:
+    post:
+      summary: Authorization
+      description: Authorization
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: email
+          type: string
+          required: true
+        - in: formData
+          name: password
+          type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+      security:
+        - api_key: []
+parameters:
+  group_id:
+    in: path
+    name: group_id
+    type: string
+    required: true
+  group_member_id:
+    in: path
+    name: group_member_id
+    type: string
+    required: true
+  post_id:
+    in: path
+    name: post_id
+    type: string
+    required: true
+  page:
+    in: query
+    name: page
+    type: integer
+    default: 1
+    required: false
+  limit:
+    in: query
+    name: limit
+    type: integer
+    required: false
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: token
+    in: query
+definitions:
+  Group:
+    required:
+      - uuid
+    properties:
+      uuid:
+        type: string
+  GroupMember:
+    required:
+      - uuid
+    properties:
+      uuid:
+        type: string
+  Post:
+    required:
+      - uuid
+    properties:
+      uuid:
+        type: string

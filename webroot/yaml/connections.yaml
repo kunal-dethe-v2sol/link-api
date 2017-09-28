@@ -1,0 +1,115 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: LinkCXO API
+  description: Connections API Specification
+schemes:
+  - http
+host: localhost
+basePath: /linkcxo-api/api
+paths:
+  /connections:
+    get:
+      summary: >-
+        - User Connection List
+        
+        - Search Connections
+      description: >-
+        - List of active user connections.
+        
+        - List of active user connections filtered by search term.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: search
+          type: string
+          required: false
+          description: >-
+            - To be used for the below conditions.
+            
+            - List of active user connections filtered by search term.
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/limit'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/UserConnection'
+      security:
+        - api_key: []
+    post:
+      summary: Request Connection
+      description: Send request to another User to accept the connection.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: user_id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: OK
+      security:
+        - api_key: []
+  /users/token:
+    post:
+      summary: Authorization
+      description: Authorization
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: email
+          type: string
+          required: true
+        - in: formData
+          name: password
+          type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+      security:
+        - api_key: []
+parameters:
+  user_id:
+    in: path
+    name: user_id
+    type: string
+    required: true
+  user_connection_id:
+    in: path
+    name: user_connection_id
+    type: string
+    required: true
+  page:
+    in: query
+    name: page
+    type: integer
+    default: 1
+    required: false
+  limit:
+    in: query
+    name: limit
+    type: integer
+    required: false
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: token
+    in: query
+definitions:
+  UserConnection:
+    required:
+      - user_connection_id
+    properties:
+      user_connection_id:
+        type: integer

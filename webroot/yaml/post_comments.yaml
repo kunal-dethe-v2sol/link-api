@@ -1,0 +1,99 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: LinkCXO API
+  description: Posts comments API Specification
+schemes:
+  - http
+host: localhost
+basePath: /linkcxo-api/api
+paths:
+  '/posts/{post_id}/post-comments.json':
+    post:
+      summary: Save Comment
+      description: Comment added to a post will be saved
+      consumes:
+        - application/x-www-form-urlencoded
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: post_id
+          type: string
+          required: true
+        - in: formData
+          name: user_id
+          type: string
+          required: true
+        - in: formData
+          name: comment
+          type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+    get:
+      summary: Get all comments.
+      description: Get all comments for a particular post.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: post_id
+          type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+  '/posts/{post_id}/post-comments/{post_comment_id}/.json':
+    get:
+      summary: Find post comment by ID
+      description: To find particular comment on a post.
+      produces:
+        - application/json
+      parameters:
+        - name: post_id
+          in: path
+          description: ID of post whose comment will be fetched
+          required: true
+          type: string
+        - name: post_comment_id
+          in: path
+          description: ID of post comment
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Not found
+    delete:
+      summary: Deletes a post comment
+      description: Removes particular comment on a post
+      produces:
+        - application/json
+      parameters:
+        - name: post_id
+          in: path
+          description: ID of post whose comment will be deleted
+          required: true
+          type: string
+        - name: post_comment_id
+          in: path
+          description: ID of post comment
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Not found

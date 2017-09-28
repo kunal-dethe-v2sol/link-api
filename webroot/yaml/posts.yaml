@@ -1,0 +1,162 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: LINKCXO API
+  description: Posts API specification
+schemes:
+  - http
+host: localhost
+basePath: /linkcxo-api/api
+tags:
+  - name: Posts
+    description: API methods for posts section
+paths:
+  /posts.json:
+    get:
+      summary: Get all posts
+      description: Display all the posts available.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not found
+    post:
+      summary: Save Post.
+      description: Save post added by user.
+      consumes:
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: image_serialize
+          type: file
+          required: false
+        - in: formData
+          name: title
+          type: string
+          required: true
+        - in: formData
+          name: content
+          type: string
+          required: true
+        - in: formData
+          name: group_id
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+  '/posts/{post_id}/.json':
+    get:
+      summary: Find post by ID
+      description: Returns a single post
+      operationId: getPostById
+      produces:
+        - application/json
+      parameters:
+        - name: post_id
+          in: path
+          description: ID of post to return
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Not found
+    put:
+      summary: Update Post
+      description: Edit and save post
+      consumes:
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: post_id
+          type: string
+          required: true
+        - in: formData
+          name: image_serialize
+          type: file
+          required: false
+        - in: formData
+          name: title
+          type: string
+          required: true
+        - in: formData
+          name: content
+          type: string
+          required: true
+        - in: formData
+          name: group_id
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Not found
+    delete:
+      summary: Deletes a post
+      description: Delete post from DB
+      operationId: deletePost
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: post_id
+          in: path
+          description: Post id to delete
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Not found
+  '/sharepost/{post_id}/.json':
+    post:
+      summary: Share Post.
+      description: Save share post data.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: post_id
+          type: string
+          required: true
+        - in: formData
+          name: share_email[]
+          type: array
+          items:
+            type: string
+          required: false
+        - in: formData
+          name: share_groups[]
+          type: array
+          items:
+            type: string
+          required: false
+        - in: formData
+          name: share_connections[]
+          type: array
+          items:
+            type: string
+          required: false
+      responses:
+        '200':
+          description: OK
