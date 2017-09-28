@@ -1,4 +1,4 @@
-# LinkCXO API
+# Link API
 
 # CakePHP Application Skeleton
 
